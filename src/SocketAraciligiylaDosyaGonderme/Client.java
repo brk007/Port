@@ -17,48 +17,45 @@ import java.net.Socket;
 
 public class Client {
 
-  public final static int SOCKET_PORT = 300;      // you may change this
-  public final static String SERVER = "10.0.0.227";  // localhost
+  public final static int SOCKET_PORT = 300;      
+  public final static String SERVER = "10.0.0.227";  
   public final static String
-       FILE_TO_RECEIVED = "C:\\Users\\bendo\\Desktop\\Banana\\validen.pdf";  // you may change this, I give a
-                                                            // different name because i don't want to
-                                                            // overwrite the one used by server...
+       Alinacak_Dosya = "C:\\Users\\bendo\\Desktop\\Banana\\validen.pdf"; 
 
-  public final static int FILE_SIZE = 6022386; // file size temporary hard coded
-                                               // should bigger than the file to be downloaded
+  public final static int Dosya_Alan = 6022386; 
 
   public static void main (String [] args ) throws IOException {
-    int bytesRead;
-    int current = 0;
-    FileOutputStream fos = null;
-    BufferedOutputStream bos = null;
+    int okunanBit;
+    int durum = 0;
+    FileOutputStream fs = null;
+    BufferedOutputStream bs = null;
     Socket sock = null;
     try {
       sock = new Socket(SERVER, SOCKET_PORT);
-      System.out.println("Connecting...");
+      System.out.println("Bağlanıyor..");
 
       // receive file
-      byte [] mybytearray  = new byte [FILE_SIZE];
+      byte [] bitArray  = new byte [Dosya_Alan];
       InputStream is = sock.getInputStream();
-      fos = new FileOutputStream(FILE_TO_RECEIVED);
-      bos = new BufferedOutputStream(fos);
-      bytesRead = is.read(mybytearray,0,mybytearray.length);
-      current = bytesRead;
+      fs = new FileOutputStream(Alinacak_Dosya);
+      bs = new BufferedOutputStream(fs);
+      okunanBit = is.read(bitArray,0,bitArray.length);
+      durum = okunanBit;
 
       do {
-         bytesRead =
-            is.read(mybytearray, current, (mybytearray.length-current));
-         if(bytesRead >= 0) current += bytesRead;
-      } while(bytesRead > -1);
+         okunanBit =
+            is.read(bitArray, durum, (bitArray.length-durum));
+         if(okunanBit >= 0) durum += okunanBit;
+      } while(okunanBit > -1);
 
-      bos.write(mybytearray, 0 , current);
-      bos.flush();
-      System.out.println("File " + FILE_TO_RECEIVED
-          + " downloaded (" + current + " bytes read)");
+      bs.write(bitArray, 0 , durum);
+      bs.flush();
+      System.out.println("Dosya " + Alinacak_Dosya
+          + " indirildi (" + durum + " okunan bit)");
     }
     finally {
-      if (fos != null) fos.close();
-      if (bos != null) bos.close();
+      if (fs != null) fs.close();
+      if (bs != null) bs.close();
       if (sock != null) sock.close();
     }
   }

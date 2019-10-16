@@ -19,43 +19,42 @@ import java.net.Socket;
 
 public class Server {
 
-  public final static int SOCKET_PORT = 300;  // you may change this
-  public final static String FILE_TO_SEND = "C:\\Users\\bendo\\Desktop\\Lalala\\Accommodation-agreement.pdf";  // you may change this
+  public final static int SOCKET_PORTU = 300;  
+  public final static String GONDERILECEK_DOSYA = "C:\\Users\\bendo\\Desktop\\Lalala\\Accommodation-agreement.pdf";  
 
   public static void main (String [] args ) throws IOException {
-    FileInputStream fis = null;
-    BufferedInputStream bis = null;
+    FileInputStream fs = null;
+    BufferedInputStream bs = null;
     OutputStream os = null;
-    ServerSocket servsock = null;
+    ServerSocket svsck = null;
     Socket sock = null;
     try {
-      servsock = new ServerSocket(SOCKET_PORT);
+      svsck = new ServerSocket(SOCKET_PORTU);
       while (true) {
-        System.out.println("Waiting...");
+        System.out.println("Beklemede...");
         try {
-          sock = servsock.accept();
-          System.out.println("Accepted connection : " + sock);
-          // send file
-          File myFile = new File (FILE_TO_SEND);
-          byte [] mybytearray  = new byte [(int)myFile.length()];
-          fis = new FileInputStream(myFile);
-          bis = new BufferedInputStream(fis);
-          bis.read(mybytearray,0,mybytearray.length);
+          sock = svsck.accept();
+          System.out.println("Bağlantı kabul edildi : " + sock);
+          File dosyam = new File (GONDERILECEK_DOSYA);
+          byte [] mybytearray  = new byte [(int)dosyam.length()];
+          fs = new FileInputStream(dosyam);
+          bs = new BufferedInputStream(fs);
+          bs.read(mybytearray,0,mybytearray.length);
           os = sock.getOutputStream();
-          System.out.println("Sending " + FILE_TO_SEND + "(" + mybytearray.length + " bytes)");
+          System.out.println("Gönderiyor " + GONDERILECEK_DOSYA + "(" + mybytearray.length + " bit)");
           os.write(mybytearray,0,mybytearray.length);
           os.flush();
           System.out.println("Done.");
         }
         finally {
-          if (bis != null) bis.close();
+          if (bs != null) bs.close();
           if (os != null) os.close();
           if (sock!=null) sock.close();
         }
       }
     }
     finally {
-      if (servsock != null) servsock.close();
+      if (svsck != null) svsck.close();
     }
   }
 }
